@@ -4,10 +4,13 @@ import Footer from "./components/Footer";
 import Text from "./components/Text";
 
 export default function Home() {
+  
   return (
-      <div className="w-full relative min-h-screen bg-[url('/bg-home.jpeg')] bg-center bg-no-repeat bg-cover flex flex-col">
+      <div className="w-full relative min-h-screen bg-[url('/bg-home-empty-save.jpg')] bg-center bg-no-repeat bg-cover flex flex-col">
         <Navbar/>
-        <Link href={'/'} className="text-[8px] md:text-[10px] lg:text-[12px] absolute font-extralight mt-[60%] md:mt-[70%] lg:mt-[80%] ml-4 md:ml-8 lg:ml-12 border-[#d1b2a0]/70 border-[0.8px] px-3 md:px-4 lg:px-[20px] py-2 md:py-3 lg:py-[8px] w-fit">VIEW GALLERY</Link>
+        <p className="text-wrap text-[40px] leading-17 text-[#d1b2a0] mt-[10%] tracking-wider w-fit mx-auto font-extralight font-display">Elegant Tattoos <br /> For Women</p>
+        <Link href={'/'} className="text-[10px] text-white md:text-[10px] lg:text-[12px] absolute font-extralight mt-[60%] md:mt-[70%] lg:mt-[80%] ml-4 md:ml-8 lg:ml-12 border-[#d1b2a0]/70 border-[0.8px] px-4 md:px-4 lg:px-[20px] py-2 md:py-3 lg:py-[8px] w-fit left-8 top-[10%] font-display">VIEW GALLERY</Link>
+        <p className="leading-17 absolute text-[#d1b2a0] bottom-20 left-5 tracking-wider w-fit font-serif   font-normal">Get In Touch</p>
         <Footer/>
         <Text />
       </div>
