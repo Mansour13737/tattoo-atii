@@ -10,7 +10,7 @@ interface Inp {
 export default function Cart({ address, w, h }: Inp) {
     return (
         <div className="h-fit w-30 pt-1 text-[13px] text-[#252f24] font-display bg-[#FCF9EA] backdrop-blur-3xl flex flex-col justify-center items-center">
-            <Image src={address} width={w} height={h} className=" h-40 object-cover object-center rounded-[2px]"
+            <Image src={address} loading="lazy" width={w} height={h} className=" h-40 object-cover object-center rounded-[2px]"
                 alt="pic" />
             <div className="flex justify-between w-full px-2 gap-3 items-center py-1 ">
                 <div>10$</div>
