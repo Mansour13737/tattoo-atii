@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -10,24 +10,43 @@ import Image from "next/image";
 
 export default function Gallery() {
   const allData = Tattos;
-  const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
 
-  // توابع مدیریت انتخاب‌ها
+  // انتخاب کارت‌ها و دسته‌بندی
+  const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // بارگذاری از localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("selectedTattoos");
+    if (stored) setSelectedCodes(JSON.parse(stored));
+  }, []);
+
+  // ذخیره در localStorage وقتی تغییر کرد
+  useEffect(() => {
+    localStorage.setItem("selectedTattoos", JSON.stringify(selectedCodes));
+  }, [selectedCodes]);
+
+  // انتخاب / حذف کارت
   const toggleSelect = (code: string) => {
     setSelectedCodes((prev) =>
       prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]
     );
   };
 
-  const types = allData.map((item) => item.category);
-  const uniqueTypes = [...new Set(types)];
+  // دسته‌ها
+  const types = [...new Set(allData.map((item) => item.category))];
+
+  // فیلتر کارت‌ها بر اساس دسته
+  const filteredTattos = selectedCategory
+    ? allData.filter((item) => item.category === selectedCategory)
+    : allData;
 
   return (
     <div className="w-full relative bg-cover overflow-auto flex flex-col text-[#FCF9EA] justify-start items-center min-h-screen bg-gradient-to-bl from-[#47473c] via-[#646650] to-[#646650] bg-no-repeat bg-center ">
       <div className="absolute top-2 w-[100%] opacity-70 right-0 h-8 bg-black"></div>
       <Navbar left="text-[#231004]" right="text-[#231004]" />
 
-      {/* 🔹 نمایش انتخاب‌ها */}
+      {/* نمایش انتخاب‌ها */}
       {selectedCodes.length > 0 && (
         <div className="fixed top-0 left-0 w-full bg-black/70 text-white text-center py-2 z-50 text-sm font-display tracking-wide">
           Selected Tattoos: {selectedCodes.join(", ")}
@@ -45,12 +64,16 @@ export default function Gallery() {
 
       {/* دسته‌ها */}
       <ul className="grid grid-cols-4 px-5 gap-1 w-full text-[12px] mt-5 tracking-wide font-display">
-        {uniqueTypes.map((type, key) => {
+        {types.map((type, key) => {
           const tattoo = allData.find((item) => item.category === type);
+          const isActive = selectedCategory === type;
           return (
             <li
               key={key}
-              className="flex cursor-pointer flex-col items-center text-center gap-2 gap-y-2 backdrop:blur-[7px] text-[8px] border-[0.2px] py-[7px] px-[3px]"
+              onClick={() => setSelectedCategory(type)}
+              className={`flex cursor-pointer flex-col items-center text-center gap-2 border-[0.2px] py-[7px] px-[3px] rounded transition-all duration-300 ${
+                isActive ? "bg-black/50 border-white" : "hover:bg-black/20"
+              }`}
             >
               <div>
                 <span className="font-semibold">{type.toUpperCase()}</span>
@@ -73,7 +96,7 @@ export default function Gallery() {
 
       {/* گالری تَتوها */}
       <div className="grid grid-cols-3 gap-1 gap-x-2 mt-[10%]">
-        {Tattos.map((item) => (
+        {filteredTattos.map((item) => (
           <Cart
             key={item.code}
             address={item.address}
@@ -87,12 +110,53 @@ export default function Gallery() {
         ))}
       </div>
 
-      <Link
-        href="/"
-        className="self-start ml-5 mt-2 mb-2 text-[10px] h-fit text-white md:text-[10px] lg:text-[16px] lg:left-0 lg:-top-[90%] lg:font-extralight font-extralight md:mt-[70%] lg:mt-[80%] md:ml-8 lg:ml-12 border-[#231004]/70 border-[0.8px] px-4 md:px-4 lg:px-[20px] py-2 md:py-3 lg:py-[8px] w-fit left-12 top-[81%] lg:hover:bg-[rgba(0,0,0,0.1)] font-display"
-      >
-        BACK
-      </Link>
+      {/* پیشنهاد رزرو وقتی حداقل یک کارت انتخاب شده */}
+      {selectedCodes.length > 0 && (
+        <div className="fixed bottom-5 right-5 bg-[#FCF9EA] text-black p-4 rounded-lg shadow-lg flex flex-col items-center z-50 animate-fade-in">
+          <span className="text-sm font-medium text-center">
+            {selectedCodes.length === 1
+              ? "Do you want to reserve a session for this tattoo?"
+              : `You have selected ${selectedCodes.length} tattoos. Ready to reserve?`}
+          </span>
+          <div className="flex gap-2 mt-2">
+            {/* رفتن به صفحه رزرو */}
+            <Link
+              href={{
+                pathname: "/reserve",
+                query: { selected: selectedCodes.join(",") },
+              }}
+              className="bg-black text-white px-3 py-1 rounded"
+            >
+              Reserve Now
+            </Link>
+            {/* ادامه انتخاب */}
+            <button
+              className="bg-gray-300 px-3 py-1 rounded"
+              onClick={() => {}}
+            >
+              Continue Selecting
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* دکمه‌های مدیریت */}
+      <div className="flex gap-4 mt-4">
+        {selectedCategory && (
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className="text-[12px] border px-3 py-1 rounded hover:bg-black/30"
+          >
+            Show All
+          </button>
+        )}
+        <Link
+          href="/"
+          className="text-[12px] border px-3 py-1 rounded hover:bg-black/30"
+        >
+          BACK
+        </Link>
+      </div>
 
       <Footer />
       <Text />
