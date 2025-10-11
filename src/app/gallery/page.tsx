@@ -52,12 +52,12 @@ export default function Gallery() {
             </ul>
 
             {/* نمایش تَتوها */}
-            <div className="grid grid-cols-3 gap-1 mt-2 gap-x-2 mt-[10%]">
+            <div className="grid grid-cols-3 gap-1 gap-x-2 mt-[10%]">
                 {Tattos.map((item, key) => (
                     <div key={key}>
-                        <Cart address={item.address} w={100} h={100} />
-                        <div className="text-center text-[10px] mt-2">
-                            <span className="text-[#E4E4E4]">{item.code}</span> {/* کد یکتای هر تَتو */}
+                        <Cart address={item.address} code={item.code} w={100} h={100} category={item.category} />
+                        <div className="text-center text-[10px] mt-2 ">
+                            {/* <span className="text-[#E4E4E4]">{item.code}</span> کد یکتای هر تَتو */}
                         </div>
                     </div>
                 ))}

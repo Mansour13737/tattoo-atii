@@ -1,24 +1,50 @@
-import Image from "next/image"
+import Image from "next/image";
 
 interface Inp {
-    address: string
-    w?: number
-    h?: number
+  address: string;
+  code: string;
+  category?: string;
+  w?: number;
+  h?: number;
+  selected: boolean;
+  onToggle: () => void;
 }
 
+export default function Cart({ address, code, w = 150, h = 150, selected, onToggle }: Inp) {
+  return (
+    <div className="cart w-[100px] sm:w-[140px] md:w-[160px] bg-[#FCF9EA] text-[#252f24] font-display rounded-md shadow-sm flex flex-col items-center overflow-hidden">
+      {/* تصویر تَتو */}
+      <div className="relative w-full h-[130px]">
+        <Image
+          src={address}
+          alt="tattoo"
+          width={w}
+          height={h}
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="/placeholder.jpg"
+          quality={70}
+          className="object-cover object-center w-full h-full rounded-[2px]"
+        />
+      </div>
 
-export default function Cart({ address, w, h }: Inp) {
-    return (
-        <div className="h-fit w-30 pt-1 text-[13px] text-[#252f24] font-display bg-[#FCF9EA] backdrop-blur-3xl flex flex-col justify-center items-center">
-            <Image src={address} loading="lazy" width={w} height={h} className=" h-40 object-cover object-center rounded-[2px]"
-                alt="pic" />
-            <div className="flex justify-between w-full px-2 gap-3 items-center py-1 ">
-                <div>10$</div>
-                <div className="px-[12px] rounded-[10px] text-white py-[1px] bg-gray-800 text-center">+</div>
-            </div>
-            <div className="p-1 pl-2 bg-black text-white flex w-full text-wrap text-[8px] overflow-y-scroll justify-center gap-2">
-                <span>#Minimal,#Thin,#Artistic,#Plants,#Forearm,#Minimal,#Thin,#Artistic,#Plants,#Forearm</span>
-            </div>
-        </div>
-    )
+      {/* دکمه تغییر وضعیت */}
+      <div className="flex justify-between w-full px-2 py-1 text-[11px]">
+        <span>{code}</span>
+        <button
+          onClick={onToggle}
+          className={`px-[10px] py-[1px] rounded-full transition ${
+            selected ? "bg-green-600 text-white" : "bg-gray-800 text-white hover:bg-gray-700"
+          }`}
+        >
+          {selected ? "✓" : "+"}
+        </button>
+      </div>
+
+      {/* تگ‌ها */}
+      <div className="bg-black text-white w-full text-[8px] text-center truncate hover:whitespace-normal hover:overflow-visible transition-all">
+        #Minimal #Thin #Artistic #Plants #Forearm
+      </div>
+    </div>
+  );
 }
