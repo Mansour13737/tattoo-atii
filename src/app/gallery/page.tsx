@@ -112,8 +112,8 @@ export default function Gallery() {
 
       {/* پیشنهاد رزرو وقتی حداقل یک کارت انتخاب شده */}
       {selectedCodes.length > 0 && (
-        <div className="fixed bottom-5 right-5 bg-[#FCF9EA] text-black p-4 rounded-lg shadow-lg flex flex-col items-center z-50 animate-fade-in">
-          <span className="text-sm font-medium text-center">
+        <div className="fixed bottom-5 transition-all duration-300 right-5 bg-[rgba(0,0,0,0.3)] backdrop-blur-[4px] scale-80 text-white p-4 rounded-lg shadow-lg flex flex-col items-center z-50 animate-fade-in">
+          <span className="text-sm text- font-medium text-center">
             {selectedCodes.length === 1
               ? "Do you want to reserve a session for this tattoo?"
               : `You have selected ${selectedCodes.length} tattoos. Ready to reserve?`}
@@ -131,7 +131,7 @@ export default function Gallery() {
             </Link>
             {/* ادامه انتخاب */}
             <button
-              className="bg-gray-300 px-3 py-1 rounded"
+              className="bg-gray-300 text-black px-3 py-1 rounded"
               onClick={() => {}}
             >
               Continue Selecting
